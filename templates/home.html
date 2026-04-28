@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">Welcome! 👋</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">👨‍🎓 Students</h5>
+                    <p class="card-text">Saare students dekho aur manage karo</p>
+                    <a href="/students" class="btn btn-light">Open</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">💰 Fees</h5>
+                    <p class="card-text">Pending fees aur payments dekho</p>
+                    <a href="/fees" class="btn btn-light">Open</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">📋 Attendance</h5>
+                    <p class="card-text">Daily attendance report dekho</p>
+                    <a href="/attendance" class="btn btn-light">Open</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

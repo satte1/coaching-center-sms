@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Fees Report{% endblock %}
+
+{% block content %}
+    <h2>💰 Pending Fees Report</h2>
+
+    {% if pending_fees %}
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Pending</th>
+                <th>Mode</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fee in pending_fees %}
+            <tr>
+                <td>{{ fee[0] }}</td>
+                <td>{{ fee[1] }}</td>
+                <td>{{ fee[2] }}</td>
+                <td>{{ fee[3] }}</td>
+                <td>
+                    <span class="badge bg-danger">
+                        ₹{{ fee[4] }}
+                    </span>
+                </td>
+                <td>{{ fee[5] }}</td>
+                <td>
+                    <button class="btn btn-sm btn-success" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#paymentModal{{ loop.index }}">
+                        + Add Payment
+                    </button>
+
+                    <!-- Payment Modal -->
+                    <div class="modal fade" id="paymentModal{{ loop.index }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        Payment — {{ fee[0] }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="POST" action="/fees/pay">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="student_id" value="{{ fee[5] }}">
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Amount</label>
+                                            <input type="number" name="amount" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Payment Mode</label>
+                                            <select name="payment_mode" class="form-select">
+                                                <option value="Cash">Cash</option>
+                                                <option value="Online">Online</option>
+                                                <option value="Cheque">Cheque</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">
+                                            Save Payment
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-success">
+        ✅ Koi pending fees nahi hai! Sab clear hai!
+    </div>
+    {% endif %}
+{% endblock %}

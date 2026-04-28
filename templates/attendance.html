@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📋 Attendance Report</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#markModal">
+            + Mark Attendance
+        </button>
+    </div>
+
+    <!-- Date Filter Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="/attendance" class="row align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Date select karo:</label>
+                    <input type="date" name="date" value="{{ date }}" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    {% if records %}
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in records %}
+            <tr>
+                <td>{{ r[0] }}</td>
+                <td>{{ r[1] }}</td>
+                <td>{{ r[2] }}</td>
+                <td>
+                    {% if r[3] == 'Present' %}
+                        <span class="badge bg-success">Present</span>
+                    {% elif r[3] == 'Absent' %}
+                        <span class="badge bg-danger">Absent</span>
+                    {% else %}
+                        <span class="badge bg-warning">Late</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-warning">
+        ❌ Is date ki koi attendance nahi mili!
+    </div>
+    {% endif %}
+
+    <!-- Mark Attendance Modal -->
+    <div class="modal fade" id="markModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mark Attendance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" action="/attendance/mark">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="form-label">Student ID</label>
+                            <input type="number" name="student_id" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Batch ID</label>
+                            <input type="number" name="batch_id" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="date" name="date" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="Present">Present</option>
+                                <option value="Absent">Absent</option>
+                                <option value="Late">Late</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Mark</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
