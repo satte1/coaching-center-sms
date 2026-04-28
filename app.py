@@ -98,6 +98,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from students.student_operations import get_all_students, add_student
 from fees.fee_operations import get_all_pending_fees, add_payment
 from attendance.attendance_operations import get_attendance_by_date, mark_attendance
+from config.db_config import get_connection
 
 app = Flask(__name__)
 app.secret_key = 'coaching123'  # flash ke liye zaroori hai
@@ -127,7 +128,15 @@ def add_student_page():
         flash(f'✅ {full_name} successfully add ho gaya!', 'success')
         return redirect(url_for('students'))
     
-    return render_template('add_student.html')
+    # Batches fetch karo dropdown ke liye
+    connection = get_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT batch_id, batch_name, course FROM batches")
+    batches = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    return render_template('add_student.html', batches=batches)
 
 @app.route('/fees')
 def fees():

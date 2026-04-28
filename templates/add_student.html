@@ -3,7 +3,10 @@
 {% block title %}Add Student{% endblock %}
 
 {% block content %}
-    <h2>👨‍🎓 Add New Student</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>👨‍🎓 Add New Student</h2>
+        <a href="/students" class="btn btn-secondary">← Back</a>
+    </div>
 
     <div class="card mt-3">
         <div class="card-body">
@@ -35,18 +38,26 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Batch Select karo</label>
+                    <select name="batch_id" class="form-select" required id="batchSelect">
+                        <option value="">-- Select Batch --</option>
+                        {% for batch in batches %}
+                        <option value="{{ batch[0] }}" data-name="{{ batch[1] }}">
+                            {{ batch[1] }} — {{ batch[2] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Batch Name</label>
-                    <input type="text" name="batch_name" class="form-control" required>
+                    <input type="text" name="batch_name" class="form-control" 
+                           id="batchName" readonly required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Joining Date</label>
                     <input type="date" name="joining_date" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Batch ID</label>
-                    <input type="number" name="batch_id" class="form-control" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add Student</button>
@@ -55,4 +66,12 @@
             </form>
         </div>
     </div>
+
+    <script>
+    document.getElementById('batchSelect').addEventListener('change', function() {
+        const selected = this.options[this.selectedIndex];
+        document.getElementById('batchName').value = selected.dataset.name || '';
+    });
+    </script>
+
 {% endblock %}
